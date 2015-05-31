@@ -41,23 +41,33 @@ void setup() {
 
 
 elapsedMillis volmsec=0;
+float freq = 0;
 
 void loop() {
+  if (volmsec >= 1) {
   int a = analogRead(15);
   float f0 = 41.2;
   float f1 = 58.7;
 
-  /*int mult = digitalRead(24) + 2*digitalRead(25) +
-           4*digitalRead(26) + 8*digitalRead(27);*/
-  int mult = digitalRead(27) + 2*digitalRead(26) +
-           4*digitalRead(25) + 8*digitalRead(24);
-  /*int mult = digitalRead(27) + 2*digitalRead(26) +
-           3*digitalRead(25) + 4*digitalRead(24);*/
+  int A = 1-digitalRead(27);
+  int B = 1-digitalRead(26);
+  int C = 1-digitalRead(25);
+  int D = 1-digitalRead(24);
 
-  if (mult == 15) {
+  /*int mult = 15 - (digitalRead(24) + 2*digitalRead(25) +
+                 4*digitalRead(26) + 8*digitalRead(27));*/
+  int mult = A + 2*B + 4*C + 8*D;
+  //int mult = A + B + C + D;
+
+  if (mult == 0) {
     waveform1.amplitude(0);
+    //freq = 0;
   } else {
-    waveform1.frequency((16-mult)*(f0+(f1-f0)*(a/1023.0)));
+    float freq2 = (mult+1)*(f0+(f1-f0)*(a/1023.0));
+    float alpha = 0.95;
+    
+    freq = freq*alpha + freq2*(1-alpha);
+    waveform1.frequency(freq);
     waveform1.amplitude(0.9);
   }
 
@@ -66,6 +76,8 @@ void loop() {
     sgtl5000_1.volume(vol); // <-- uncomment if you have the optional
     volmsec = 0;               //     volume pot on your audio shield
   }*/
+  volmsec = 0;
+  }
 }
 
 
