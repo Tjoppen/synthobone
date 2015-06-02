@@ -46,8 +46,9 @@ float freq = 0;
 void loop() {
   if (volmsec >= 1) {
   int a = analogRead(15);
-  float f0 = 41.2;
-  float f1 = 58.7;
+  Serial1.printf("analog = %i\n", a);
+  //float f0 = 41.2, f1 = 58.7;
+  float f0 = 10, f1 = 100;
 
   int A = 1-digitalRead(27);
   int B = 1-digitalRead(26);
